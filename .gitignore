@@ -1,2 +1,4 @@
 node_modules
 dist
+
+src/dal/mockdb/data/json
