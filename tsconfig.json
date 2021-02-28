@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "allowJs": false,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": false,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "baseUrl": "src",
+    "paths": {
+      "@services/*": ["services/*"],
+      "@backtypes/*": ["types/*"],
+      "@dal": ["dal"],
+      "@middlewares/*": ["middlewares/*"],
+      "@logic/*": ["logic/*"],
+      "@owntypes/*": ["types/*"]
+    }
+  },
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "typeRoots": ["node_modules/@types"],
+  "include": ["src", "../front/shared"],
+  "exclude": ["./node_modules/*"]
+}
