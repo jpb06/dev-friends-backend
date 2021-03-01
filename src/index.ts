@@ -27,7 +27,7 @@ app.use(contextInitializationMiddleware, mainRouter);
 app.use(errorsMiddleware);
 app.use(noRouteMiddleware);
 
-const port = 3001;
-app.listen(port, "", () => {
+const port = process.env.PORT || 3001;
+app.listen(port as number, "", () => {
   console.log(`Workshop api running on port ${port}`);
 });
