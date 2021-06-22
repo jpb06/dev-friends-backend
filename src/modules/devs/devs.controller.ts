@@ -30,7 +30,7 @@ export class DevsController {
     return devs;
   }
 
-  @Post(':id/change-squad')
+  @Post('change-squad')
   @ApiRoute({
     summary: 'Moves the developer to another squad',
     description: 'Changes the squad of the developer',
