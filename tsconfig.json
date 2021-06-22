@@ -1,36 +1,20 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "moduleResolution": "node",
-    "outDir": "./dist",
-    "allowJs": false,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": true,
-    "noEmitOnError": true,
+    "module": "commonjs",
+    "declaration": true,
     "removeComments": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": false,
-    "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
     "baseUrl": "src",
     "paths": {
-      "@services/*": ["services/*"],
-      "@backtypes/*": ["types/*"],
-      "@dal": ["dal"],
-      "@middlewares/*": ["middlewares/*"],
-      "@logic/*": ["logic/*"],
-      "@owntypes/*": ["types/*"]
-    }
-  },
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "typeRoots": ["node_modules/@types"],
-  "include": ["src", "../front/shared"],
-  "exclude": ["./node_modules/*"]
+      "@decorators/*": ["./decorators/*"],
+      "@modules/*": ["./modules/*"],
+      "@type/*": ["types/*"]
+    },
+    "incremental": true
+  }
 }
