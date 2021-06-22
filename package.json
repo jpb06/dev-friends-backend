@@ -5,6 +5,10 @@
   "author": "jpb06",
   "private": true,
   "license": "MIT",
+  "engines": {
+    "node": "14.x",
+    "yarn": "1.22.10"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
