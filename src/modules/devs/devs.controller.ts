@@ -5,6 +5,7 @@ import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ChangeSquadDto } from '@type/dto/change-squad.dto';
 import { DevDto } from '@type/dto/dev.dto';
+import { GetDevelopersBySquadsDto } from '@type/dto/get-developers-by-squads.dto';
 
 @Controller('devs')
 @ApiTags('devs')
@@ -66,5 +67,23 @@ export class DevsController {
     await this.devsStore.update(dev);
 
     return `${dev.firstName} moved to squad ${squad.squad}`;
+  }
+
+  @Post('by-squads')
+  @ApiRoute({
+    summary: 'Get developers belonging to one or several squads',
+    description: 'Retrieves the developers belonging to a set of squads',
+    ok: {
+      type: [DevDto],
+      description: 'The developers',
+    },
+    badRequest: {},
+  })
+  async getDevelopersBySquads(
+    @Body() { idSquads }: GetDevelopersBySquadsDto,
+  ): Promise<Array<DevDto>> {
+    const devs = await this.devsStore.getAll();
+
+    return devs.filter((dev) => idSquads.includes(dev.squad));
   }
 }
