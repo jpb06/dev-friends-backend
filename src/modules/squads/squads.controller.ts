@@ -1,11 +1,13 @@
-import { ApiRoute } from '@decorators/api-route';
-import { DevsStoreService } from '@modules/dal/stores/devs-store.service';
-import { SquadsStoreService } from '@modules/dal/stores/squads-store.service';
 import { Param, ParseIntPipe } from '@nestjs/common';
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { DevDto } from '@type/dto/dev.dto';
-import { SquadDto } from '@type/dto/squad.dto';
+
+import { ApiRoute } from '@decorators/api-route';
+import { DevsStoreService } from '@modules/dal/stores/devs-store.service';
+import { SquadsStoreService } from '@modules/dal/stores/squads-store.service';
+
+import { AllSquadsResultDto } from './dto/all-squads.result.dto';
+import { SquadsDevelopersResultDto } from './dto/squads-developers.result.dto';
 
 @Controller('squads')
 @ApiTags('squads')
@@ -20,14 +22,14 @@ export class SquadsController {
     summary: 'Get all squads',
     description: 'Retrieves all the squads, but not their members',
     ok: {
-      type: [SquadDto],
+      type: AllSquadsResultDto,
       description: 'The available squads',
     },
   })
-  async getAllSquads(): Promise<Array<SquadDto>> {
+  async getAllSquads(): Promise<AllSquadsResultDto> {
     const squads = await this.squadsStore.getAll();
 
-    return squads;
+    return { result: squads };
   }
 
   @Get(':id/devs')
@@ -35,7 +37,7 @@ export class SquadsController {
     summary: 'Get the developers belonging to a squad',
     description: 'Retrieves the squad developers',
     ok: {
-      type: [DevDto],
+      type: SquadsDevelopersResultDto,
       description: 'The squad developers',
     },
     notFound: { description: "The requested squad wasn't found" },
@@ -43,9 +45,9 @@ export class SquadsController {
   })
   async getSquadsDevelopers(
     @Param('id', new ParseIntPipe()) idSquad: number,
-  ): Promise<Array<SquadDto>> {
-    const squads = await this.devsStore.getBy(idSquad);
+  ): Promise<SquadsDevelopersResultDto> {
+    const devs = await this.devsStore.getBy(idSquad);
 
-    return squads;
+    return { result: devs };
   }
 }

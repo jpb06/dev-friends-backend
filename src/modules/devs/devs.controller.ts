@@ -1,11 +1,15 @@
+import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 import { ApiRoute } from '@decorators/api-route';
 import { DevsStoreService } from '@modules/dal/stores/devs-store.service';
 import { SquadsStoreService } from '@modules/dal/stores/squads-store.service';
-import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { ChangeSquadDto } from '@type/dto/change-squad.dto';
-import { DevDto } from '@type/dto/dev.dto';
-import { GetDevelopersBySquadsDto } from '@type/dto/get-developers-by-squads.dto';
+
+import { AllDevsResultDto } from './dto/all-devs.result.dto';
+import { ChangeSquadBodyDto } from './dto/change-squad.body.dto';
+import { ChangeSquadResultDto } from './dto/change-squad.result.dto';
+import { DevelopersBySquadsBodyDto } from './dto/developers-by-squads.body.dto';
+import { DevelopersBySquadsResultDto } from './dto/developers-by-squads.result.dto';
 
 @Controller('devs')
 @ApiTags('devs')
@@ -20,14 +24,14 @@ export class DevsController {
     summary: 'Get all developers',
     description: 'Retrieves all developers, but not their squad',
     ok: {
-      type: [DevDto],
+      type: AllDevsResultDto,
       description: 'The available developers',
     },
   })
-  async getAllDevelopers(): Promise<Array<DevDto>> {
+  async getAllDevelopers(): Promise<AllDevsResultDto> {
     const devs = await this.devsStore.getAll();
 
-    return devs;
+    return { result: devs };
   }
 
   @Post('change-squad')
@@ -35,7 +39,7 @@ export class DevsController {
     summary: 'Moves the developer to another squad',
     description: 'Changes the squad of the developer',
     ok: {
-      type: String,
+      type: ChangeSquadResultDto,
       description:
         'A message containing the name of the developer and his new squad',
       schema: {
@@ -49,8 +53,8 @@ export class DevsController {
     badRequest: {},
   })
   async changeDeveloperSquad(
-    @Body() { idDev, idSquad }: ChangeSquadDto,
-  ): Promise<string> {
+    @Body() { idDev, idSquad }: ChangeSquadBodyDto,
+  ): Promise<ChangeSquadResultDto> {
     const devs = await this.devsStore.getAll();
     const dev = devs.find((el) => el.id === idDev);
     if (!dev) {
@@ -66,7 +70,7 @@ export class DevsController {
     dev.squad = squad.id;
     await this.devsStore.update(dev);
 
-    return `${dev.firstName} moved to squad ${squad.squad}`;
+    return { result: `${dev.firstName} moved to squad ${squad.squad}` };
   }
 
   @Post('by-squads')
@@ -74,16 +78,16 @@ export class DevsController {
     summary: 'Get developers belonging to one or several squads',
     description: 'Retrieves the developers belonging to a set of squads',
     ok: {
-      type: [DevDto],
+      type: [DevelopersBySquadsResultDto],
       description: 'The developers',
     },
     badRequest: {},
   })
   async getDevelopersBySquads(
-    @Body() { idSquads }: GetDevelopersBySquadsDto,
-  ): Promise<Array<DevDto>> {
+    @Body() { idSquads }: DevelopersBySquadsBodyDto,
+  ): Promise<DevelopersBySquadsResultDto> {
     const devs = await this.devsStore.getAll();
 
-    return devs.filter((dev) => idSquads.includes(dev.squad));
+    return { result: devs.filter((dev) => idSquads.includes(dev.squad)) };
   }
 }

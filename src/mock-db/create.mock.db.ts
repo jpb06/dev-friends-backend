@@ -1,11 +1,13 @@
-import * as fs from 'fs-extra';
+/* eslint-disable no-console */
 import * as path from 'path';
+
+import * as fs from 'fs-extra';
 
 import { devs } from './data/devs.data';
 import { squads } from './data/squads.data';
 
 export const createMockDb = async () => {
-  console.log('Creating mock db ...');
+  console.info('Creating mock db ...');
 
   const dbDirectory = path.join(__dirname, '..', 'data', 'json');
   await fs.ensureDir(dbDirectory);
@@ -13,5 +15,5 @@ export const createMockDb = async () => {
   const data = { devs, squads };
 
   await fs.writeJson(filepath, data);
-  console.log('Mock DB created.\n');
+  console.info('Mock DB created.\n');
 };

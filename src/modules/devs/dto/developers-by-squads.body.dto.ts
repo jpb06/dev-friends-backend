@@ -1,8 +1,7 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
 
-import { ApiProperty } from '@nestjs/swagger';
-
-export class GetDevelopersBySquadsDto {
+export class DevelopersBySquadsBodyDto {
   @ApiProperty({
     type: [Number],
   })

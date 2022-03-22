@@ -1,6 +1,9 @@
 {
-   "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.count": 80,
-   "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.type": "newLineEachExpressionAfterCountLimitExceptIfOnlyOne",
-   "importSorter.importStringConfiguration.tabSize": 2,
-   "importSorter.importStringConfiguration.trailingComma": "multiLine"
-}
+   "eslint.run": "onSave",
+   "editor.formatOnSave": true,
+   "editor.codeActionsOnSave": {
+     "source.fixAll": true
+   },
+   "editor.tabSize": 2
+ }
+ 

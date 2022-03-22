@@ -1,8 +1,7 @@
-import { createMockDb } from 'mock-db/create.mock.db';
-
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { createMockDb } from 'mock-db/create.mock.db';
 
 import { AppModule } from './modules/app.module';
 
