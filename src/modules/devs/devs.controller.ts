@@ -78,7 +78,7 @@ export class DevsController {
     summary: 'Get developers belonging to one or several squads',
     description: 'Retrieves the developers belonging to a set of squads',
     ok: {
-      type: [DevelopersBySquadsResultDto],
+      type: DevelopersBySquadsResultDto,
       description: 'The developers',
     },
     badRequest: {},
