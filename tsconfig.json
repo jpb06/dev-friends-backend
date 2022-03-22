@@ -1,20 +1,29 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "target": "es2015",
+    "moduleResolution": "node",
+    "strict": true,
+    "strictPropertyInitialization": false,
     "declaration": true,
     "removeComments": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "isolatedModules": true,
     "sourceMap": true,
+    "skipLibCheck": true,
     "outDir": "./dist",
     "baseUrl": "src",
     "paths": {
-      "@decorators/*": ["./decorators/*"],
-      "@modules/*": ["./modules/*"],
+      "@decorators/*": ["decorators/*"],
+      "@modules/*": ["modules/*"],
       "@type/*": ["types/*"]
     },
     "incremental": true
-  }
+  },
+  "exclude": ["node_modules"]
 }

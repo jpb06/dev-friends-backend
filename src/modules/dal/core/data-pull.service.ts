@@ -1,6 +1,6 @@
+import { Injectable } from '@nestjs/common';
 import * as fs from 'fs-extra';
 
-import { Injectable } from '@nestjs/common';
 import Database from '@type/dbase/database.interface';
 import { Dev } from '@type/dbase/dev.interface';
 import { Squad } from '@type/dbase/squad.interface';

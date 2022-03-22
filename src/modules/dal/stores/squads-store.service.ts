@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+
 import { Squad } from '@type/dbase/squad.interface';
 
 import { DataPullService } from '../core/data-pull.service';

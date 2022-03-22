@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude, Expose } from 'class-transformer';
 
-export class DevDto {
+@Exclude()
+export class SquadDto {
+  @Expose()
   @ApiProperty()
   id: number;
 
-  @ApiProperty()
-  firstName: string;
-
+  @Expose()
   @ApiProperty()
   squad: number;
 }
