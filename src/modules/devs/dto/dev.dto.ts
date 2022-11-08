@@ -9,9 +9,13 @@ export class DevDto {
 
   @Expose()
   @ApiProperty()
+  idSquad: number;
+
+  @Expose()
+  @ApiProperty()
   firstName: string;
 
   @Expose()
   @ApiProperty()
-  squad: number;
+  avatar: string;
 }

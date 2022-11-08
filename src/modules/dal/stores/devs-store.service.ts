@@ -26,7 +26,7 @@ export class DevsStoreService {
     }
 
     const devs = await this.dataPull.getDevs();
-    const squadDevs = devs.filter((el) => el.squad === idSquad);
+    const squadDevs = devs.filter((el) => el.idSquad === idSquad);
 
     return squadDevs;
   }
@@ -34,7 +34,7 @@ export class DevsStoreService {
   async getFor(idSquads: Array<number>): Promise<Array<Dev>> {
     const devs = await this.dataPull.getDevs();
 
-    const squadsDevs = devs.filter((el) => idSquads.includes(el.squad));
+    const squadsDevs = devs.filter((el) => idSquads.includes(el.idSquad));
 
     return squadsDevs;
   }

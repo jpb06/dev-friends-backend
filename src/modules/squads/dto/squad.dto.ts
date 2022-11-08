@@ -9,5 +9,5 @@ export class SquadDto {
 
   @Expose()
   @ApiProperty()
-  squad: number;
+  name: string;
 }

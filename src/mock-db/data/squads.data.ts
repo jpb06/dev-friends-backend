@@ -1,8 +1,8 @@
 import { Squad } from '@type/dbase/squad.interface';
 
 export const squads: Array<Squad> = [
-  { id: 1, squad: 1 },
-  { id: 2, squad: 2 },
-  { id: 3, squad: 3 },
-  { id: 4, squad: 4 },
+  { id: 1, name: 'The coolest squad' },
+  { id: 2, name: 'Yolo squad' },
+  { id: 3, name: 'Predators' },
+  { id: 4, name: 'Obliterators' },
 ];
