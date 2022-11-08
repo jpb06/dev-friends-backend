@@ -67,10 +67,10 @@ export class DevsController {
       throw new NotFoundException('Squad not found');
     }
 
-    dev.squad = squad.id;
+    dev.idSquad = squad.id;
     await this.devsStore.update(dev);
 
-    return { result: `${dev.firstName} moved to squad ${squad.squad}` };
+    return { result: `${dev.firstName} moved to squad ${squad.name}` };
   }
 
   @Post('by-squads')
@@ -88,6 +88,6 @@ export class DevsController {
   ): Promise<DevelopersBySquadsResultDto> {
     const devs = await this.devsStore.getAll();
 
-    return { result: devs.filter((dev) => idSquads.includes(dev.squad)) };
+    return { result: devs.filter((dev) => idSquads.includes(dev.idSquad)) };
   }
 }
