@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { createMockDb } from 'mock-db/create.mock.db';
@@ -29,7 +29,8 @@ export const bootstrap = async (): Promise<INestApplication> => {
   SwaggerModule.setup('', app, document);
 
   const port = process.env.PORT || 3001;
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
+  Logger.log(`🚀 Application is running on: http://localhost:${port}`);
 
   return app;
 };
