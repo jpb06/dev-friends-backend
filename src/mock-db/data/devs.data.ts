@@ -1,6 +1,6 @@
 import { Dev } from '@type/dbase/dev.interface';
 
-export const devs: Array<Dev> = [
+export const devs: Dev[] = [
   {
     id: 1,
     idSquad: 3,

@@ -1,15 +1,27 @@
-import { Body, Controller, Get, NotFoundException, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+/* eslint-disable no-console */
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  NotFoundException,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
-import { ApiRoute } from '@decorators/api-route';
-import { DevsStoreService } from '@modules/dal/stores/devs-store.service';
-import { SquadsStoreService } from '@modules/dal/stores/squads-store.service';
+import { delay } from '../../util/delay';
 
 import { AllDevsResultDto } from './dto/all-devs.result.dto';
 import { ChangeSquadBodyDto } from './dto/change-squad.body.dto';
 import { ChangeSquadResultDto } from './dto/change-squad.result.dto';
 import { DevelopersBySquadsBodyDto } from './dto/developers-by-squads.body.dto';
 import { DevelopersBySquadsResultDto } from './dto/developers-by-squads.result.dto';
+
+import { ApiRoute } from '@decorators/api-route';
+import { DevsStoreService } from '@modules/dal/stores/devs-store.service';
+import { SquadsStoreService } from '@modules/dal/stores/squads-store.service';
 
 @Controller('devs')
 @ApiTags('devs')
@@ -28,8 +40,20 @@ export class DevsController {
       description: 'The available developers',
     },
   })
-  async getAllDevelopers(): Promise<AllDevsResultDto> {
+  @ApiQuery({
+    name: 'delayMs',
+    description: 'A delay in milliseconds before returning the result',
+    required: false,
+    type: Number,
+  })
+  async getAllDevelopers(
+    @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
+  ): Promise<AllDevsResultDto> {
     const devs = await this.devsStore.getAll();
+
+    if (delayMs !== 0) {
+      await delay(delayMs);
+    }
 
     return { result: devs };
   }
@@ -52,7 +76,14 @@ export class DevsController {
     },
     badRequest: {},
   })
+  @ApiQuery({
+    name: 'delayMs',
+    description: 'A delay in milliseconds before returning the result',
+    required: false,
+    type: Number,
+  })
   async changeDeveloperSquad(
+    @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
     @Body() { idDev, idSquad }: ChangeSquadBodyDto,
   ): Promise<ChangeSquadResultDto> {
     const devs = await this.devsStore.getAll();
@@ -70,6 +101,10 @@ export class DevsController {
     dev.idSquad = squad.id;
     await this.devsStore.update(dev);
 
+    if (delayMs !== 0) {
+      await delay(delayMs);
+    }
+
     return { result: `${dev.firstName} moved to squad ${squad.name}` };
   }
 
@@ -83,10 +118,21 @@ export class DevsController {
     },
     badRequest: {},
   })
+  @ApiQuery({
+    name: 'delayMs',
+    description: 'A delay in milliseconds before returning the result',
+    required: false,
+    type: Number,
+  })
   async getDevelopersBySquads(
+    @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
     @Body() { idSquads }: DevelopersBySquadsBodyDto,
   ): Promise<DevelopersBySquadsResultDto> {
     const devs = await this.devsStore.getAll();
+
+    if (delayMs !== 0) {
+      await delay(delayMs);
+    }
 
     return { result: devs.filter((dev) => idSquads.includes(dev.idSquad)) };
   }

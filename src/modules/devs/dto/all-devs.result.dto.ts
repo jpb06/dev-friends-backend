@@ -8,5 +8,5 @@ export class AllDevsResultDto {
   @Expose()
   @ApiProperty({ isArray: true, type: DevDto })
   @Type(() => DevDto)
-  result: Array<DevDto>;
+  result: DevDto[];
 }

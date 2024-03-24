@@ -1,9 +1,10 @@
 import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { createMockDb } from 'mock-db/create.mock.db';
 
 import { AppModule } from './modules/app.module';
+
+import { createMockDb } from 'mock-db/create.mock.db';
 
 export const bootstrap = async (): Promise<INestApplication> => {
   await createMockDb();

@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs-extra';
 
-import Database from '@type/dbase/database.interface';
+import { DbPathService } from './db-path.service';
+
+import { Database } from '@type/dbase/database.interface';
 import { Dev } from '@type/dbase/dev.interface';
 import { Squad } from '@type/dbase/squad.interface';
-
-import { DbPathService } from './db-path.service';
 
 @Injectable()
 export class DataPullService {
   constructor(private dbPath: DbPathService) {}
 
-  async getSquads(): Promise<Array<Squad>> {
+  async getSquads(): Promise<Squad[]> {
     const db = await fs.readJson(this.dbPath.getDbPath());
-    const squads = (<Database>db).squads as Array<Squad>;
+    const squads = (db as Database).squads as Squad[];
 
     return squads;
   }
 
-  async getDevs(): Promise<Array<Dev>> {
+  async getDevs(): Promise<Dev[]> {
     const db = await fs.readJson(this.dbPath.getDbPath());
-    const devs = (<Database>db).devs as Array<Dev>;
+    const devs = (db as Database).devs as Dev[];
 
     return devs;
   }

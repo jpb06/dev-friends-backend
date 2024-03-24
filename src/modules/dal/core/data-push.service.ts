@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs-extra';
 
-import { Dev } from '@type/dbase/dev.interface';
-import { Squad } from '@type/dbase/squad.interface';
-
 import { DataPullService } from './data-pull.service';
 import { DbPathService } from './db-path.service';
+
+import { Dev } from '@type/dbase/dev.interface';
+import { Squad } from '@type/dbase/squad.interface';
 
 type Collection = 'squads' | 'devs';
 type PersistedType = Dev | Squad;
 
 interface PersistAllParams {
-  squads?: Array<Squad>;
-  devs?: Array<Dev>;
+  squads?: Squad[];
+  devs?: Dev[];
 }
 
 @Injectable()
@@ -36,28 +36,28 @@ export class DataPushService {
     return item;
   }
 
-  private async getBy(collection: Collection): Promise<Array<PersistedType>> {
-    let data: Array<PersistedType>;
+  private async getBy(collection: Collection): Promise<PersistedType[]> {
+    let data: PersistedType[];
 
     switch (collection) {
       case 'squads':
-        data = (await this.dataPull.getSquads()) as Array<PersistedType>;
+        data = (await this.dataPull.getSquads()) as PersistedType[];
         break;
       case 'devs':
-        data = (await this.dataPull.getDevs()) as Array<PersistedType>;
+        data = (await this.dataPull.getDevs()) as PersistedType[];
         break;
     }
 
     return data;
   }
 
-  private async persistBy(collection: Collection, data: Array<PersistedType>) {
+  private async persistBy(collection: Collection, data: PersistedType[]) {
     switch (collection) {
       case 'squads':
-        await this.persistAll({ squads: data as Array<Squad> });
+        await this.persistAll({ squads: data as Squad[] });
         break;
       case 'devs':
-        await this.persistAll({ devs: data as Array<Dev> });
+        await this.persistAll({ devs: data as Dev[] });
         break;
     }
   }

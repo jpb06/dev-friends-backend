@@ -1,13 +1,21 @@
-import { Param, ParseIntPipe } from '@nestjs/common';
-import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  Param,
+  ParseIntPipe,
+  Controller,
+  Get,
+  DefaultValuePipe,
+  Query,
+} from '@nestjs/common';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
+
+import { delay } from '../../util/delay';
+
+import { AllSquadsResultDto } from './dto/all-squads.result.dto';
+import { SquadsDevelopersResultDto } from './dto/squads-developers.result.dto';
 
 import { ApiRoute } from '@decorators/api-route';
 import { DevsStoreService } from '@modules/dal/stores/devs-store.service';
 import { SquadsStoreService } from '@modules/dal/stores/squads-store.service';
-
-import { AllSquadsResultDto } from './dto/all-squads.result.dto';
-import { SquadsDevelopersResultDto } from './dto/squads-developers.result.dto';
 
 @Controller('squads')
 @ApiTags('squads')
@@ -26,8 +34,20 @@ export class SquadsController {
       description: 'The available squads',
     },
   })
-  async getAllSquads(): Promise<AllSquadsResultDto> {
+  @ApiQuery({
+    name: 'delayMs',
+    description: 'A delay in milliseconds before returning the result',
+    required: false,
+    type: Number,
+  })
+  async getAllSquads(
+    @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
+  ): Promise<AllSquadsResultDto> {
     const squads = await this.squadsStore.getAll();
+
+    if (delayMs !== 0) {
+      await delay(delayMs);
+    }
 
     return { result: squads };
   }
@@ -43,10 +63,21 @@ export class SquadsController {
     notFound: { description: "The requested squad wasn't found" },
     badRequest: {},
   })
+  @ApiQuery({
+    name: 'delayMs',
+    description: 'A delay in milliseconds before returning the result',
+    required: false,
+    type: Number,
+  })
   async getSquadsDevelopers(
+    @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
     @Param('id', new ParseIntPipe()) idSquad: number,
   ): Promise<SquadsDevelopersResultDto> {
     const devs = await this.devsStore.getBy(idSquad);
+
+    if (delayMs !== 0) {
+      await delay(delayMs);
+    }
 
     return { result: devs };
   }
