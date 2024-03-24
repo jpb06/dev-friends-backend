@@ -1,4 +1,4 @@
-name: Fly Deploy
+name: ⚡ Fly Deploy
 
 on:
   push:
@@ -10,14 +10,14 @@ env:
 
 jobs:
   deploy:
-    name: Deploy app
+    name: 🤖 Deploy app
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@v4
 
-      - name: flyctl setup
+      - name: 🪂 flyctl setup
         uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Deploying ...
+      - name: 🚀 Deploying ...
         run: flyctl deploy --remote-only
