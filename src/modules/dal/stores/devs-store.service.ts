@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { map, mergeMap, Observable, of, tap, throwError } from 'rxjs';
 
 import { DataPullService } from '../core/data-pull.service';
 import { DataPushService } from '../core/data-push.service';
 
 import { Dev } from '@type/dbase/dev.interface';
+import { Squad } from '@type/dbase/squad.interface';
 
 @Injectable()
 export class DevsStoreService {
@@ -12,36 +14,29 @@ export class DevsStoreService {
     private dataPull: DataPullService,
   ) {}
 
-  async getAll(): Promise<Dev[]> {
-    const devs = await this.dataPull.getDevs();
+  public getAll = (): Observable<Dev[]> => this.dataPull.getDevs();
 
-    return devs;
-  }
+  private throwIfSquadNotFound = (idSquad: number) => (squads: Squad[]) =>
+    of(squads).pipe(
+      tap((squads) => {
+        const squadExists = squads.find(({ id }) => id === idSquad);
+        if (!squadExists) {
+          return throwError(() => new NotFoundException('Squad not found'));
+        }
+      }),
+    );
 
-  async getBy(idSquad: number): Promise<Dev[]> {
-    const squads = await this.dataPull.getSquads();
-    const squadExists = squads.some((el) => el.id === idSquad);
-    if (!squadExists) {
-      throw new NotFoundException('Squad not found');
-    }
+  public getBy = (idSquad: number): Observable<Dev[]> =>
+    this.dataPull.getSquads().pipe(
+      mergeMap(this.throwIfSquadNotFound(idSquad)),
+      mergeMap(() => this.dataPull.getDevs()),
+      map((devs) => devs.filter((el) => el.idSquad === idSquad)),
+    );
 
-    const devs = await this.dataPull.getDevs();
-    const squadDevs = devs.filter((el) => el.idSquad === idSquad);
+  public getFor = (idSquads: number[]): Observable<Dev[]> =>
+    this.dataPull
+      .getDevs()
+      .pipe(map((devs) => devs.filter((el) => idSquads.includes(el.idSquad))));
 
-    return squadDevs;
-  }
-
-  async getFor(idSquads: number[]): Promise<Dev[]> {
-    const devs = await this.dataPull.getDevs();
-
-    const squadsDevs = devs.filter((el) => idSquads.includes(el.idSquad));
-
-    return squadsDevs;
-  }
-
-  async update(dev: Dev) {
-    await this.dataPush.persist(dev, 'devs');
-
-    return true;
-  }
+  public update = (dev: Dev) => this.dataPush.persist(dev, 'devs').subscribe();
 }
