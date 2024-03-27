@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs-extra';
+import { from, map, Observable } from 'rxjs';
 
 import { DbPathService } from './db-path.service';
 
@@ -11,17 +12,15 @@ import { Squad } from '@type/dbase/squad.interface';
 export class DataPullService {
   constructor(private dbPath: DbPathService) {}
 
-  async getSquads(): Promise<Squad[]> {
-    const db = await fs.readJson(this.dbPath.getDbPath());
-    const squads = (db as Database).squads as Squad[];
+  getSquads(): Observable<Squad[]> {
+    const path = this.dbPath.getDbPath();
 
-    return squads;
+    return from(fs.readJson(path)).pipe(map((db) => (db as Database).squads));
   }
 
-  async getDevs(): Promise<Dev[]> {
-    const db = await fs.readJson(this.dbPath.getDbPath());
-    const devs = (db as Database).devs as Dev[];
+  getDevs(): Observable<Dev[]> {
+    const path = this.dbPath.getDbPath();
 
-    return devs;
+    return from(fs.readJson(path)).pipe(map((db) => (db as Database).devs));
   }
 }

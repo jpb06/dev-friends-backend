@@ -7,8 +7,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-
-import { delay } from '../../util/delay';
+import { delay, map, Observable } from 'rxjs';
 
 import { AllSquadsResultDto } from './dto/all-squads.result.dto';
 import { SquadsDevelopersResultDto } from './dto/squads-developers.result.dto';
@@ -40,16 +39,13 @@ export class SquadsController {
     required: false,
     type: Number,
   })
-  async getAllSquads(
+  getAllSquads(
     @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
-  ): Promise<AllSquadsResultDto> {
-    const squads = await this.squadsStore.getAll();
-
-    if (delayMs !== 0) {
-      await delay(delayMs);
-    }
-
-    return { result: squads };
+  ): Observable<AllSquadsResultDto> {
+    return this.squadsStore.getAll().pipe(
+      delay(delayMs),
+      map((squads) => ({ result: squads })),
+    );
   }
 
   @Get(':id/devs')
@@ -69,16 +65,13 @@ export class SquadsController {
     required: false,
     type: Number,
   })
-  async getSquadsDevelopers(
+  getSquadsDevelopers(
     @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
     @Param('id', new ParseIntPipe()) idSquad: number,
-  ): Promise<SquadsDevelopersResultDto> {
-    const devs = await this.devsStore.getBy(idSquad);
-
-    if (delayMs !== 0) {
-      await delay(delayMs);
-    }
-
-    return { result: devs };
+  ): Observable<SquadsDevelopersResultDto> {
+    return this.devsStore.getBy(idSquad).pipe(
+      delay(delayMs),
+      map((devs) => ({ result: devs })),
+    );
   }
 }

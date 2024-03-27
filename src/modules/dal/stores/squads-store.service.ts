@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { from, Observable } from 'rxjs';
 
 import { DataPullService } from '../core/data-pull.service';
 
@@ -8,9 +9,5 @@ import { Squad } from '@type/dbase/squad.interface';
 export class SquadsStoreService {
   constructor(private dataPull: DataPullService) {}
 
-  async getAll(): Promise<Squad[]> {
-    const squads = await this.dataPull.getSquads();
-
-    return squads;
-  }
+  public getAll = (): Observable<Squad[]> => from(this.dataPull.getSquads());
 }
