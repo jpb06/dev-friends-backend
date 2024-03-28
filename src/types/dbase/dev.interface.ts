@@ -3,4 +3,6 @@ export interface Dev {
   idSquad: number;
   firstName: string;
   avatar: string;
+  bio: string;
+  jobTitle?: string;
 }
