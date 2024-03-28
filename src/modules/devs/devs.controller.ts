@@ -22,6 +22,7 @@ import {
   tap,
 } from 'rxjs';
 
+import { createPaginatedResponse } from '../../logic/create-paginated-response.logic';
 import { ParsePositiveIntegerPipe } from '../../pipes/parse-positive-integer/parse-positive-integer.pipe';
 
 import { AllDevsResultDto } from './dto/all-devs.result.dto';
@@ -78,18 +79,9 @@ export class DevsController {
     @Query('byPage', new DefaultValuePipe(20), ParsePositiveIntegerPipe)
     byPage: number,
   ): Observable<AllDevsResultDto> {
-    return this.devsStore.getAll().pipe(
-      delay(delayMs),
-      map((devs) => {
-        const start = (page - 1) * byPage;
-        const lastPage = Math.ceil(devs.length / byPage);
-
-        return {
-          result: devs.splice(start, byPage),
-          lastPage,
-        };
-      }),
-    );
+    return this.devsStore
+      .getAll()
+      .pipe(delay(delayMs), map(createPaginatedResponse(page, byPage)));
   }
 
   private throwIfDevNotFound = (idDev: number) => (devs: Dev[]) =>
@@ -196,15 +188,7 @@ export class DevsController {
       mergeMap((l) => l),
       filter((dev) => idSquads.includes(dev.idSquad)),
       toArray(),
-      map((devs) => {
-        const start = (page - 1) * byPage;
-        const lastPage = Math.ceil(devs.length / byPage);
-
-        return {
-          result: devs.splice(start, byPage),
-          lastPage,
-        };
-      }),
+      map(createPaginatedResponse(page, byPage)),
     );
   }
 }
