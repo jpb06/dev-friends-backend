@@ -3,7 +3,7 @@ import * as path from 'path';
 
 import * as fs from 'fs-extra';
 
-import { devs } from './data/devs.data';
+import { generateDevs } from './data/devs.data';
 import { squads } from './data/squads.data';
 
 export const createMockDb = async () => {
@@ -12,6 +12,8 @@ export const createMockDb = async () => {
   const dbDirectory = path.join(__dirname, '..', 'data', 'json');
   await fs.ensureDir(dbDirectory);
   const filepath = path.join(dbDirectory, 'db.json');
+  const devs = generateDevs();
+  console.log('devs', devs);
   const data = { devs, squads };
 
   await fs.writeJson(filepath, data);

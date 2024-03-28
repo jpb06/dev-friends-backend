@@ -22,6 +22,8 @@ import {
   tap,
 } from 'rxjs';
 
+import { ParsePositiveIntegerPipe } from '../../pipes/parse-positive-integer/parse-positive-integer.pipe';
+
 import { AllDevsResultDto } from './dto/all-devs.result.dto';
 import { ChangeSquadBodyDto } from './dto/change-squad.body.dto';
 import { ChangeSquadResultDto } from './dto/change-squad.result.dto';
@@ -56,12 +58,37 @@ export class DevsController {
     required: false,
     type: Number,
   })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page to fetch, starting at 1',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'byPage',
+    description: 'Numbers of developers to fetch per page',
+    required: false,
+    type: Number,
+  })
   getAllDevelopers(
-    @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
+    @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe)
+    delayMs: number,
+    @Query('page', new DefaultValuePipe(1), ParsePositiveIntegerPipe)
+    page: number,
+    @Query('byPage', new DefaultValuePipe(20), ParsePositiveIntegerPipe)
+    byPage: number,
   ): Observable<AllDevsResultDto> {
     return this.devsStore.getAll().pipe(
       delay(delayMs),
-      map((devs) => ({ result: devs })),
+      map((devs) => {
+        const start = (page - 1) * byPage;
+        const lastPage = Math.ceil(devs.length / byPage);
+
+        return {
+          result: devs.splice(start, byPage),
+          lastPage,
+        };
+      }),
     );
   }
 
@@ -144,8 +171,24 @@ export class DevsController {
     required: false,
     type: Number,
   })
+  @ApiQuery({
+    name: 'page',
+    description: 'Page to fetch, starting at 1',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'byPage',
+    description: 'Numbers of developers to fetch per page',
+    required: false,
+    type: Number,
+  })
   public getDevelopersBySquads(
     @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
+    @Query('page', new DefaultValuePipe(1), ParsePositiveIntegerPipe)
+    page: number,
+    @Query('byPage', new DefaultValuePipe(20), ParsePositiveIntegerPipe)
+    byPage: number,
     @Body() { idSquads }: DevelopersBySquadsBodyDto,
   ): Observable<DevelopersBySquadsResultDto> {
     return this.devsStore.getAll().pipe(
@@ -153,7 +196,15 @@ export class DevsController {
       mergeMap((l) => l),
       filter((dev) => idSquads.includes(dev.idSquad)),
       toArray(),
-      map((devs) => ({ result: devs })),
+      map((devs) => {
+        const start = (page - 1) * byPage;
+        const lastPage = Math.ceil(devs.length / byPage);
+
+        return {
+          result: devs.splice(start, byPage),
+          lastPage,
+        };
+      }),
     );
   }
 }
