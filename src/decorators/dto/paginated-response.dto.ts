@@ -17,4 +17,8 @@ export class PaginatedResponseDto {
   @Expose()
   @ApiProperty()
   lastPage: number;
+
+  @Expose()
+  @ApiProperty()
+  total: number;
 }
