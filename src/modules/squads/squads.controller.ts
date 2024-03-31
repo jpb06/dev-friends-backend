@@ -7,7 +7,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { delay, map, Observable } from 'rxjs';
+import { delay, map, Observable, zip } from 'rxjs';
 
 import { ParsePositiveIntegerPipe } from '../../pipes/parse-positive-integer/parse-positive-integer.pipe';
 
@@ -45,9 +45,14 @@ export class SquadsController {
   getAllSquads(
     @Query('delayMs', new DefaultValuePipe(0), ParseIntPipe) delayMs: number,
   ): Observable<AllSquadsResultDto> {
-    return this.squadsStore.getAll().pipe(
+    return zip(this.squadsStore.getAll(), this.devsStore.getAll()).pipe(
       delay(delayMs),
-      map((squads) => ({ result: squads })),
+      map(([squads, devs]) => ({
+        result: squads.map((squad) => ({
+          ...squad,
+          devsCount: devs.filter((dev) => dev.idSquad === squad.id).length,
+        })),
+      })),
     );
   }
 
