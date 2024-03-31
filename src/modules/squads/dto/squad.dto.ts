@@ -10,4 +10,8 @@ export class SquadDto {
   @Expose()
   @ApiProperty()
   name: string;
+
+  @Expose()
+  @ApiProperty()
+  devsCount: number;
 }
