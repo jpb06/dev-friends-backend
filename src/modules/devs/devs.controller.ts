@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   Body,
   Controller,
@@ -11,15 +10,15 @@ import {
 } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
+  Observable,
+  delay,
   filter,
   map,
   mergeMap,
-  Observable,
-  delay,
-  toArray,
   of,
-  throwError,
   tap,
+  throwError,
+  toArray,
 } from 'rxjs';
 
 import { createPaginatedResponse } from '../../logic/create-paginated-response.logic';
@@ -117,7 +116,7 @@ export class DevsController {
       description:
         'A message containing the name of the developer and his new squad',
       schema: {
-        example: `Yolo McCool moved to squad 4`,
+        example: 'Yolo McCool moved to squad 4',
       },
     },
     notFound: {

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { map, mergeMap, Observable, of, tap, throwError } from 'rxjs';
+import { Observable, map, mergeMap, of, tap, throwError } from 'rxjs';
 
 import { DataPullService } from '../core/data-pull.service';
 import { DataPushService } from '../core/data-push.service';
@@ -23,6 +23,8 @@ export class DevsStoreService {
         if (!squadExists) {
           return throwError(() => new NotFoundException('Squad not found'));
         }
+
+        return;
       }),
     );
 

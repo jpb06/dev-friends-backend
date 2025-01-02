@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import * as fs from 'fs-extra';
-import { from, map, Observable } from 'rxjs';
+import fs from 'fs-extra';
+import { Observable, from, map } from 'rxjs';
 
 import { DbPathService } from './db-path.service';
 
