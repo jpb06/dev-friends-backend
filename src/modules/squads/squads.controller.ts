@@ -1,13 +1,13 @@
 import {
+  Controller,
+  DefaultValuePipe,
+  Get,
   Param,
   ParseIntPipe,
-  Controller,
-  Get,
-  DefaultValuePipe,
   Query,
 } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { delay, map, Observable, zip } from 'rxjs';
+import { Observable, delay, map, zip } from 'rxjs';
 
 import { ParsePositiveIntegerPipe } from '../../pipes/parse-positive-integer/parse-positive-integer.pipe';
 

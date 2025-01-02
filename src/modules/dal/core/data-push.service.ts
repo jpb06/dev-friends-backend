@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import * as fs from 'fs-extra';
-import { combineLatestWith, from, map, Observable, tap } from 'rxjs';
+import fs from 'fs-extra';
+import { Observable, combineLatestWith, from, map, tap } from 'rxjs';
 import { match } from 'ts-pattern';
 
 import { DataPullService } from './data-pull.service';

@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
-import * as path from 'path';
+import path from 'node:path';
 
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 
 import { generateDevs } from './data/devs.data';
 import { squads } from './data/squads.data';
@@ -13,7 +12,6 @@ export const createMockDb = async () => {
   await fs.ensureDir(dbDirectory);
   const filepath = path.join(dbDirectory, 'db.json');
   const devs = generateDevs();
-  console.log('devs', devs);
   const data = { devs, squads };
 
   await fs.writeJson(filepath, data);
